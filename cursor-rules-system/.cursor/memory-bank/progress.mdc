@@ -1,0 +1,143 @@
+---
+description: Current status and progress tracking
+globs: 
+alwaysApply: true
+---
+
+# Progress
+
+## Project Status Overview
+[GOAL] **Current Phase**: [Phase name and overall objective]
+[TECH] **Technology Maturity**: [How stable is the current tech stack]
+[TEAM] **Team Status**: [Team size, roles, availability]
+
+## [COMPLETE] Features & Components
+### Core Infrastructure
+- [COMPLETE] **[Infrastructure Item 1]** - [Brief description]
+- [COMPLETE] **[Infrastructure Item 2]** - [Brief description]
+
+### User Features
+- [COMPLETE] **[Feature 1]** - [Description, completion date]
+- [COMPLETE] **[Feature 2]** - [Description, completion date]
+
+### Technical Features
+- [COMPLETE] **[Technical Feature 1]** - [Description, completion date]
+- [COMPLETE] **[Technical Feature 2]** - [Description, completion date]
+
+## [IN_PROGRESS] Current Work
+### Active Development
+- [IN_PROGRESS] **[Feature/Task 1]** - [Current status, blocker if any]
+  - **Progress**: [Percentage or milestone]
+  - **Next Steps**: [Immediate next actions]
+  - **ETA**: [Expected completion]
+
+- [IN_PROGRESS] **[Feature/Task 2]** - [Current status, blocker if any]
+  - **Progress**: [Percentage or milestone]
+  - **Next Steps**: [Immediate next actions]
+  - **ETA**: [Expected completion]
+
+### Under Review
+- [TESTING] **[Item 1]** - [What's being tested or reviewed]
+- [TESTING] **[Item 2]** - [What's being tested or reviewed]
+
+## [PENDING] Planned Work
+### Next Sprint/Phase
+- [READY] **[Planned Item 1]** - [Description and priority]
+- [READY] **[Planned Item 2]** - [Description and priority]
+
+### Backlog (Prioritized)
+1. [PRIORITY] **[High Priority Item]** - [Description and why it's important]
+2. **[Medium Priority Item]** - [Description]
+3. **[Lower Priority Item]** - [Description]
+
+## [BLOCKED] Blocked Items
+- [BLOCKED] **[Blocked Item 1]** - [Description]
+  - **Blocker**: [What's blocking this]
+  - **Owner**: [Who can unblock this]
+  - **Impact**: [What this affects]
+
+- [BLOCKED] **[Blocked Item 2]** - [Description]
+  - **Blocker**: [What's blocking this]
+  - **Owner**: [Who can unblock this]
+  - **Impact**: [What this affects]
+
+## [CANCELLED] Cancelled/Deprioritized
+- [CANCELLED] **[Cancelled Item 1]** - [Why it was cancelled]
+- [CANCELLED] **[Cancelled Item 2]** - [Why it was cancelled]
+
+## What Works Well
+### Stable Features
+- **[Working Feature 1]**: [Description and why it works well]
+- **[Working Feature 2]**: [Description and why it works well]
+
+### Effective Patterns
+- **[Pattern 1]**: [Description and benefits]
+- **[Pattern 2]**: [Description and benefits]
+
+### Team/Process Wins
+- **[Process Win 1]**: [Description]
+- **[Process Win 2]**: [Description]
+
+## Known Issues
+### Critical Issues
+- [RISK] **[Critical Issue 1]** - [Description and impact]
+  - **Workaround**: [Temporary solution if any]
+  - **Fix Plan**: [How this will be resolved]
+
+### Non-Critical Issues
+- **[Issue 1]** - [Description]
+- **[Issue 2]** - [Description]
+
+### Technical Debt
+- **[Debt Item 1]** - [Description and when to address]
+- **[Debt Item 2]** - [Description and when to address]
+
+## Metrics & Health
+### Performance Metrics
+- [DOCS] **[Metric 1]**: [Current value, target, trend]
+- [DOCS] **[Metric 2]**: [Current value, target, trend]
+
+### Quality Metrics
+- [DOCS] **Test Coverage**: [Current percentage]
+- [DOCS] **Bug Count**: [Current count, trend]
+- [DOCS] **Performance**: [Load times, response times]
+
+### Team Metrics
+- [DOCS] **Velocity**: [Recent sprint velocity]
+- [DOCS] **Cycle Time**: [Average time from start to completion]
+
+## Recent Learnings
+### Technical Insights
+- **[Learning 1]**: [What was learned and how it applies]
+- **[Learning 2]**: [What was learned and how it applies]
+
+### Process Insights
+- **[Process Learning 1]**: [What was learned]
+- **[Process Learning 2]**: [What was learned]
+
+## Dependencies & External Factors
+### External Dependencies
+- [DEPENDENCY] **[External Dependency 1]** - [Status and impact]
+- [DEPENDENCY] **[External Dependency 2]** - [Status and impact]
+
+### Integration Points
+- **[Integration 1]**: [Status and stability]
+- **[Integration 2]**: [Status and stability]
+
+## Risk Assessment
+### High Risk Items
+- [RISK] **[Risk 1]** - [Description, probability, impact]
+- [RISK] **[Risk 2]** - [Description, probability, impact]
+
+### Medium Risk Items
+- **[Risk 3]** - [Description and mitigation plan]
+- **[Risk 4]** - [Description and mitigation plan]
+
+## Next Major Milestones
+1. **[Milestone 1]** - [Target date, completion criteria]
+2. **[Milestone 2]** - [Target date, completion criteria]
+3. **[Milestone 3]** - [Target date, completion criteria]
+
+---
+
+**Update Frequency**: This file should be reviewed and updated weekly, with active items updated more frequently as status changes.

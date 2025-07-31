@@ -1,0 +1,119 @@
+---
+description: Code quality tools and practices
+globs: 
+alwaysApply: true
+---
+
+# Code Quality
+
+## Summary
+Defines the tools, processes, and standards for maintaining high code quality throughout the development lifecycle.
+
+## Context
+Automated code quality checks catch issues early, enforce consistency, and maintain high standards across the team. This system provides a safety net for code quality.
+
+## Instructions
+
+### Linting Configuration
+- **ESLint** for JavaScript/TypeScript code quality
+- **Prettier** for consistent code formatting
+- **Stylelint** for CSS/SCSS quality (if applicable)
+- **Custom rules** for project-specific patterns
+
+### Pre-commit Hooks
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{css,scss}": ["stylelint --fix", "prettier --write"],
+    "*.{md,json}": ["prettier --write"]
+  }
+}
+```
+
+### Testing Standards
+- **Unit Tests**: Aim for 80%+ coverage on business logic
+- **Integration Tests**: Cover critical user flows
+- **E2E Tests**: Cover main application workflows
+- **Test Naming**: Descriptive test names that explain the scenario
+
+### Code Review Process
+1. **Automated Checks**: All CI checks must pass
+2. **Peer Review**: At least one team member review required
+3. **Self Review**: Author reviews their own changes first
+4. **Documentation**: Update relevant documentation
+
+### Quality Gates
+- **Build Success**: Code must compile without errors
+- **Test Coverage**: Maintain minimum coverage thresholds
+- **Linting**: No linting errors or warnings
+- **Security**: Pass security vulnerability scans
+- **Performance**: Meet performance benchmarks
+
+## Examples
+
+### ESLint Configuration Example
+```json
+{
+  "extends": [
+    "eslint:recommended",
+    "@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "prefer-const": "error"
+  }
+}
+```
+
+### Test Structure Example
+```typescript
+describe('UserValidation', () => {
+  describe('validateEmail', () => {
+    it('should accept valid email addresses', () => {
+      const validEmails = ['user@example.com', 'test.user+tag@domain.org'];
+      
+      validEmails.forEach(email => {
+        expect(validateEmail(email)).toBe(true);
+      });
+    });
+    
+    it('should reject invalid email addresses', () => {
+      const invalidEmails = ['invalid', '@domain.com', 'user@'];
+      
+      invalidEmails.forEach(email => {
+        expect(validateEmail(email)).toBe(false);
+      });
+    });
+  });
+});
+```
+
+### Commit Message Standards
+```
+feat: add user authentication system
+fix: resolve memory leak in data fetching
+docs: update API documentation
+refactor: simplify user validation logic
+test: add unit tests for payment processing
+```
+
+## Quality Metrics to Track
+- **Code Coverage**: Percentage of code covered by tests
+- **Cyclomatic Complexity**: Measure of code complexity
+- **Technical Debt**: Time needed to fix code quality issues
+- **Bug Density**: Number of bugs per lines of code
+- **Code Duplication**: Percentage of duplicated code
+
+---
+
+**Note**: Quality standards should evolve with the project. Regular retrospectives should identify areas for improvement in the quality process.

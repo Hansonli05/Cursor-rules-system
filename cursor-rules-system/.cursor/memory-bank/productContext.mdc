@@ -1,0 +1,63 @@
+---
+description: Product vision and user experience goals
+globs: 
+alwaysApply: true
+---
+
+# Product Context
+
+## Problem Statement
+[Detailed description of the problem you're solving]
+- [Specific pain point 1]
+- [Specific pain point 2]
+- [Market gap or opportunity]
+
+## Target Users
+### Primary Users
+- **[User Type 1]**: [Description, needs, behaviors]
+- **[User Type 2]**: [Description, needs, behaviors]
+
+### Secondary Users
+- **[User Type 3]**: [Description, needs, behaviors]
+
+## User Stories/Use Cases
+### Core User Flows
+1. **[Primary Flow Name]**
+   - User wants to [goal]
+   - Steps: [brief flow description]
+   - Success: [end state]
+
+2. **[Secondary Flow Name]**
+   - User wants to [goal]
+   - Steps: [brief flow description]
+   - Success: [end state]
+
+## Product Goals
+### Business Goals
+- [Business objective 1]
+- [Business objective 2]
+- [Success metrics]
+
+### User Experience Goals
+- [UX goal 1]: [Description]
+- [UX goal 2]: [Description]
+- [Key experience principles]
+
+## Competitive Landscape
+- **[Competitor 1]**: [What they do well, gaps]
+- **[Competitor 2]**: [What they do well, gaps]
+- **Our Differentiator**: [What makes this product unique]
+
+## Success Metrics
+- [Quantitative metric 1]: [Target]
+- [Quantitative metric 2]: [Target]
+- [Qualitative metric 1]: [Description]
+
+## Product Principles
+- [Principle 1]: [Description]
+- [Principle 2]: [Description]
+- [Principle 3]: [Description]
+
+---
+
+**Note**: This context drives feature prioritization and user experience decisions. Update when user research reveals new insights or market conditions change.

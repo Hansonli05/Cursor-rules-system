@@ -1,0 +1,372 @@
+---
+description: Example API integration patterns and error handling
+globs: 
+alwaysApply: false
+---
+
+# API Integration (Example)
+
+## Summary
+Defines consistent patterns for integrating with external APIs including error handling, retry logic, caching, and data transformation. This is an example template.
+
+## Context
+API integrations are critical points of failure and complexity. Consistent patterns ensure reliability, maintainability, and good user experience even when external services have issues.
+
+## Instructions
+
+### API Client Structure
+- **Base Client**: Common configuration, headers, interceptors
+- **Service Clients**: Specific API endpoints and methods
+- **Error Handling**: Consistent error types and recovery
+- **Retry Logic**: Exponential backoff for transient failures
+- **Caching**: Appropriate caching strategies per endpoint
+
+### Request/Response Flow
+1. **Request Preparation**
+   - Validate input parameters
+   - Add authentication headers
+   - Apply request transformations
+   - Log request details (non-sensitive)
+
+2. **Request Execution**
+   - Execute with timeout
+   - Handle network errors
+   - Implement retry logic
+   - Monitor request performance
+
+3. **Response Processing**
+   - Validate response structure
+   - Transform data format
+   - Cache when appropriate
+   - Log response details
+
+## Examples
+
+### Base API Client
+```typescript
+class BaseApiClient {
+  private baseURL: string;
+  private defaultTimeout: number = 10000;
+  
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+  }
+  
+  async request<T>(
+    endpoint: string, 
+    options: RequestOptions = {}
+  ): Promise<ApiResponse<T>> {
+    const config = {
+      method: options.method || 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
+        ...options.headers
+      },
+      timeout: options.timeout || this.defaultTimeout,
+      body: options.body ? JSON.stringify(options.body) : undefined
+    };
+    
+    try {
+      const response = await this.executeWithRetry(
+        `${this.baseURL}${endpoint}`, 
+        config,
+        options.retryOptions
+      );
+      
+      return this.processResponse<T>(response);
+    } catch (error) {
+      throw this.handleError(error, endpoint);
+    }
+  }
+  
+  private async executeWithRetry(
+    url: string, 
+    config: RequestConfig,
+    retryOptions?: RetryOptions
+  ): Promise<Response> {
+    const maxRetries = retryOptions?.maxRetries || 3;
+    const backoffMs = retryOptions?.backoffMs || 1000;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch(url, config);
+        
+        if (response.ok || !this.isRetryableError(response.status)) {
+          return response;
+        }
+        
+        if (attempt === maxRetries) {
+          throw new ApiError('Max retries exceeded', response.status);
+        }
+        
+        await this.delay(backoffMs * Math.pow(2, attempt));
+      } catch (error) {
+        if (attempt === maxRetries || !this.isRetryableError(error)) {
+          throw error;
+        }
+        
+        await this.delay(backoffMs * Math.pow(2, attempt));
+      }
+    }
+  }
+}
+```
+
+### Service-Specific Client
+```typescript
+class UserService extends BaseApiClient {
+  constructor() {
+    super(process.env.USER_SERVICE_URL);
+  }
+  
+  async getUser(userId: string): Promise<User> {
+    const cacheKey = `user:${userId}`;
+    const cached = await this.cache.get(cacheKey);
+    
+    if (cached) {
+      return cached;
+    }
+    
+    const response = await this.request<UserResponse>(`/users/${userId}`);
+    const user = this.transformUserResponse(response.data);
+    
+    await this.cache.set(cacheKey, user, { ttl: 300 }); // 5 minutes
+    
+    return user;
+  }
+  
+  async updateUser(userId: string, updates: UserUpdate): Promise<User> {
+    const response = await this.request<UserResponse>(`/users/${userId}`, {
+      method: 'PATCH',
+      body: this.transformUserUpdate(updates)
+    });
+    
+    const user = this.transformUserResponse(response.data);
+    
+    // Invalidate cache
+    await this.cache.delete(`user:${userId}`);
+    
+    return user;
+  }
+  
+  private transformUserResponse(data: UserResponse): User {
+    return {
+      id: data.user_id,
+      email: data.email_address,
+      name: `${data.first_name} ${data.last_name}`,
+      createdAt: new Date(data.created_at),
+      isActive: data.status === 'active'
+    };
+  }
+}
+```
+
+### Error Handling Pattern
+```typescript
+enum ApiErrorType {
+  NETWORK = 'NETWORK',
+  TIMEOUT = 'TIMEOUT',
+  RATE_LIMIT = 'RATE_LIMIT',
+  AUTHENTICATION = 'AUTHENTICATION',
+  AUTHORIZATION = 'AUTHORIZATION',
+  VALIDATION = 'VALIDATION',
+  NOT_FOUND = 'NOT_FOUND',
+  SERVER_ERROR = 'SERVER_ERROR',
+  UNKNOWN = 'UNKNOWN'
+}
+
+class ApiError extends Error {
+  public type: ApiErrorType;
+  public statusCode?: number;
+  public retryable: boolean;
+  public details?: any;
+  
+  constructor(
+    message: string, 
+    statusCode?: number, 
+    details?: any
+  ) {
+    super(message);
+    this.name = 'ApiError';
+    this.statusCode = statusCode;
+    this.details = details;
+    this.type = this.determineErrorType(statusCode);
+    this.retryable = this.isRetryableError(statusCode);
+  }
+  
+  private determineErrorType(statusCode?: number): ApiErrorType {
+    if (!statusCode) return ApiErrorType.NETWORK;
+    
+    switch (statusCode) {
+      case 400: return ApiErrorType.VALIDATION;
+      case 401: return ApiErrorType.AUTHENTICATION;
+      case 403: return ApiErrorType.AUTHORIZATION;
+      case 404: return ApiErrorType.NOT_FOUND;
+      case 429: return ApiErrorType.RATE_LIMIT;
+      case 408: return ApiErrorType.TIMEOUT;
+      default:
+        return statusCode >= 500 
+          ? ApiErrorType.SERVER_ERROR 
+          : ApiErrorType.UNKNOWN;
+    }
+  }
+}
+```
+
+### React Hook Pattern
+```typescript
+function useApi<T>(
+  apiCall: () => Promise<T>,
+  dependencies: any[] = []
+) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<ApiError | null>(null);
+  
+  const execute = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await apiCall();
+      setData(result);
+    } catch (err) {
+      const apiError = err instanceof ApiError 
+        ? err 
+        : new ApiError('Unknown error occurred');
+      
+      setError(apiError);
+      
+      // Log error for monitoring
+      logApiError(apiError);
+    } finally {
+      setLoading(false);
+    }
+  }, dependencies);
+  
+  useEffect(() => {
+    execute();
+  }, [execute]);
+  
+  return { data, loading, error, retry: execute };
+}
+
+// Usage
+function UserProfile({ userId }: { userId: string }) {
+  const { data: user, loading, error, retry } = useApi(
+    () => userService.getUser(userId),
+    [userId]
+  );
+  
+  if (loading) return <Spinner />;
+  
+  if (error) {
+    return (
+      <ErrorDisplay 
+        error={error} 
+        onRetry={error.retryable ? retry : undefined}
+      />
+    );
+  }
+  
+  return <UserDetails user={user} />;
+}
+```
+
+### Caching Strategy
+```typescript
+class ApiCache {
+  private cache = new Map<string, CacheEntry>();
+  
+  async get<T>(key: string): Promise<T | null> {
+    const entry = this.cache.get(key);
+    
+    if (!entry) return null;
+    
+    if (Date.now() > entry.expiresAt) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return entry.data as T;
+  }
+  
+  async set<T>(
+    key: string, 
+    data: T, 
+    options: { ttl: number }
+  ): Promise<void> {
+    this.cache.set(key, {
+      data,
+      expiresAt: Date.now() + (options.ttl * 1000)
+    });
+  }
+  
+  async delete(key: string): Promise<void> {
+    this.cache.delete(key);
+  }
+  
+  // Cache invalidation patterns
+  async invalidatePattern(pattern: string): Promise<void> {
+    const regex = new RegExp(pattern);
+    const keysToDelete = Array.from(this.cache.keys())
+      .filter(key => regex.test(key));
+    
+    keysToDelete.forEach(key => this.cache.delete(key));
+  }
+}
+```
+
+## Testing Patterns
+```typescript
+describe('UserService', () => {
+  let userService: UserService;
+  let mockFetch: jest.MockedFunction<typeof fetch>;
+  
+  beforeEach(() => {
+    mockFetch = fetch as jest.MockedFunction<typeof fetch>;
+    userService = new UserService();
+  });
+  
+  describe('getUser', () => {
+    it('should return user data on successful response', async () => {
+      const mockUser = { user_id: '123', email_address: 'test@example.com' };
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockUser)
+      } as Response);
+      
+      const user = await userService.getUser('123');
+      
+      expect(user.id).toBe('123');
+      expect(user.email).toBe('test@example.com');
+    });
+    
+    it('should retry on server errors', async () => {
+      mockFetch
+        .mockRejectedValueOnce(new Error('Network error'))
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve({ user_id: '123' })
+        } as Response);
+      
+      const user = await userService.getUser('123');
+      
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(user.id).toBe('123');
+    });
+  });
+});
+```
+
+## Monitoring and Logging
+- **Request/Response Logging**: Log all API calls (sanitized)
+- **Performance Metrics**: Track response times and success rates
+- **Error Tracking**: Detailed error logging with context
+- **Rate Limiting**: Monitor and alert on rate limit issues
+- **Health Checks**: Regular API availability checks
+
+---
+
+**Note**: Customize these patterns based on your specific API requirements, security needs, and performance constraints.

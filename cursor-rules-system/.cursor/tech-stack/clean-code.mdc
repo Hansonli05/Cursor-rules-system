@@ -1,0 +1,119 @@
+---
+description: Clean code practices and standards
+globs: 
+alwaysApply: true
+---
+
+# Clean Code Standards
+
+## Summary
+Establishes consistent code quality standards and best practices for maintainable, readable code across the project.
+
+## Context
+Clean code reduces technical debt, improves team collaboration, and makes the codebase more maintainable over time. These standards ensure consistency regardless of who is writing the code.
+
+## Instructions
+
+### General Principles
+- **Clarity over cleverness** - Write code that tells a story
+- **Consistency** - Follow established patterns throughout the codebase
+- **Simplicity** - Prefer simple solutions over complex ones
+- **Single Responsibility** - Each function/class should have one clear purpose
+
+### Naming Conventions
+- **Variables**: Use descriptive, meaningful names
+  - Good: `userAuthenticationToken`, `isEmailValid`
+  - Bad: `token`, `flag`, `data`
+
+- **Functions**: Use verb-noun combinations that describe what the function does
+  - Good: `validateUserEmail()`, `fetchUserProfile()`
+  - Bad: `check()`, `handle()`, `process()`
+
+- **Constants**: Use UPPER_SNAKE_CASE for constants
+  - Good: `MAX_RETRY_ATTEMPTS`, `API_BASE_URL`
+  - Bad: `maxRetries`, `apiUrl`
+
+### Function Guidelines
+- **Keep functions small** - Aim for 20 lines or fewer
+- **Single responsibility** - One function, one job
+- **Pure functions when possible** - Predictable inputs and outputs
+- **Avoid deep nesting** - Use early returns to reduce complexity
+
+### Code Organization
+- **Group related functionality** together
+- **Separate concerns** - Business logic, UI logic, data access
+- **Use consistent file structure** across similar components
+- **Import organization** - External libraries, internal modules, relative imports
+
+### Comments and Documentation
+- **Write self-documenting code** - Good names reduce need for comments
+- **Comment the "why", not the "what"** - Explain business logic and decisions
+- **Keep comments up to date** - Outdated comments are worse than no comments
+- **Use JSDoc/TSDoc** for public APIs and complex functions
+
+## Examples
+
+### Good Naming Example
+```typescript
+// Good: Clear, descriptive names
+function calculateMonthlySubscriptionPrice(
+  basePrice: number, 
+  discountPercentage: number, 
+  taxRate: number
+): number {
+  const discountAmount = basePrice * (discountPercentage / 100);
+  const discountedPrice = basePrice - discountAmount;
+  const taxAmount = discountedPrice * taxRate;
+  return discountedPrice + taxAmount;
+}
+```
+
+### Function Structure Example
+```typescript
+// Good: Single responsibility, early returns
+function validateUserRegistration(userData: UserData): ValidationResult {
+  if (!userData.email) {
+    return { isValid: false, error: 'Email is required' };
+  }
+  
+  if (!isValidEmailFormat(userData.email)) {
+    return { isValid: false, error: 'Invalid email format' };
+  }
+  
+  if (userData.password.length < 8) {
+    return { isValid: false, error: 'Password must be at least 8 characters' };
+  }
+  
+  return { isValid: true };
+}
+```
+
+### Code Organization Example
+```typescript
+// Good: Organized imports and structure
+import React from 'react';
+import { Button, Card } from '@/components/ui';
+import { useAuth } from '@/hooks/useAuth';
+import { validateEmail } from '@/utils/validation';
+
+interface LoginFormProps {
+  onSuccess: () => void;
+  onError: (error: string) => void;
+}
+
+export function LoginForm({ onSuccess, onError }: LoginFormProps) {
+  // Component implementation
+}
+```
+
+## Anti-Patterns to Avoid
+- **Magic numbers** - Use named constants instead
+- **Deep nesting** - Prefer early returns and guard clauses
+- **God functions** - Break large functions into smaller, focused ones
+- **Inconsistent naming** - Stick to established conventions
+- **Commenting obvious code** - Let the code speak for itself
+- **Overly complex conditionals** - Extract to well-named functions
+
+---
+
+**Note**: These standards should be enforced through linting rules and code review processes. Update this document when the team adopts new practices or tools.

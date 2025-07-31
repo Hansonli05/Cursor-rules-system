@@ -1,0 +1,49 @@
+---
+description: Project foundation and core requirements
+globs: 
+alwaysApply: true
+---
+
+# Project Brief
+
+## Project Name
+[Your Project Name]
+
+## Core Purpose
+[Brief description of what problem this project solves]
+
+## Key Requirements
+- [Primary requirement 1]
+- [Primary requirement 2]
+- [Primary requirement 3]
+- [Additional requirements as needed]
+
+## Success Criteria
+- [How will you know the project is successful?]
+- [What are the key metrics or outcomes?]
+- [What defines "done" for this project?]
+
+## Project Constraints
+- [Timeline constraints]
+- [Budget constraints]
+- [Technical constraints]
+- [Resource constraints]
+
+## Target Users/Audience
+- [Primary user group]
+- [Secondary user groups]
+- [User personas if relevant]
+
+## Key Features (High Level)
+- [Feature 1]: [Brief description]
+- [Feature 2]: [Brief description]
+- [Feature 3]: [Brief description]
+
+## Out of Scope
+- [What will NOT be included in this project]
+- [Features deliberately excluded]
+- [Future phase considerations]
+
+---
+
+**Note**: This file serves as the foundation for all other memory bank files. Update it when project scope or core requirements change.

@@ -1,0 +1,149 @@
+---
+description: Technology stack and development setup
+globs: 
+alwaysApply: true
+---
+
+# Tech Context
+
+## Technology Stack
+### Frontend
+- **Framework**: [e.g., React, Vue, Angular, Next.js]
+- **Language**: [e.g., TypeScript, JavaScript]
+- **Styling**: [e.g., Tailwind CSS, Styled Components, CSS Modules]
+- **State Management**: [e.g., Redux, Zustand, Context API]
+- **Build Tool**: [e.g., Vite, Webpack, Next.js built-in]
+
+### Backend
+- **Runtime**: [e.g., Node.js, Python, Go, Java]
+- **Framework**: [e.g., Express, FastAPI, Gin, Spring Boot]
+- **Language**: [e.g., TypeScript, Python, Go, Java]
+- **API Style**: [e.g., REST, GraphQL, tRPC]
+
+### Database
+- **Primary Database**: [e.g., PostgreSQL, MongoDB, MySQL]
+- **Caching**: [e.g., Redis, Memcached]
+- **Search**: [e.g., Elasticsearch, Algolia] (if applicable)
+- **File Storage**: [e.g., AWS S3, Cloudinary] (if applicable)
+
+### Infrastructure & Deployment
+- **Hosting**: [e.g., Vercel, AWS, Google Cloud, Heroku]
+- **Database Hosting**: [e.g., Supabase, PlanetScale, MongoDB Atlas]
+- **CDN**: [e.g., Cloudflare, AWS CloudFront]
+- **Monitoring**: [e.g., Sentry, DataDog, New Relic]
+
+### Development Tools
+- **Package Manager**: [e.g., npm, yarn, pnpm]
+- **Version Control**: [e.g., Git, GitHub, GitLab]
+- **CI/CD**: [e.g., GitHub Actions, Vercel, CircleCI]
+- **Code Quality**: [e.g., ESLint, Prettier, Husky]
+- **Testing**: [e.g., Jest, Vitest, Cypress, Playwright]
+
+## Development Setup
+### Prerequisites
+```bash
+# Required software versions
+Node.js: [version]
+Package Manager: [npm/yarn/pnpm version]
+Database: [if running locally]
+Other tools: [list any other required tools]
+```
+
+### Local Development
+```bash
+# Clone and setup
+git clone [repository-url]
+cd [project-name]
+[package-manager] install
+
+# Environment setup
+cp .env.example .env.local
+# [Instructions for setting up environment variables]
+
+# Start development
+[package-manager] run dev
+```
+
+### Environment Variables
+- **Required Variables**:
+  - `DATABASE_URL`: [Description]
+  - `API_KEY`: [Description]
+  - `[OTHER_VAR]`: [Description]
+
+- **Optional Variables**:
+  - `[OPTIONAL_VAR]`: [Description and default]
+
+## Technical Constraints
+### Performance Requirements
+- **Load Time**: [Target page load times]
+- **API Response**: [Target API response times]
+- **Concurrent Users**: [Expected user capacity]
+
+### Browser Support
+- **Target Browsers**: [List of supported browsers and versions]
+- **Mobile Support**: [Requirements for mobile devices]
+- **Accessibility**: [Accessibility standards to meet]
+
+### Security Requirements
+- **Authentication**: [Requirements and standards]
+- **Data Privacy**: [Privacy and compliance requirements]
+- **API Security**: [Security standards for APIs]
+
+### Scalability Considerations
+- **Expected Growth**: [User growth projections]
+- **Resource Limits**: [Known resource constraints]
+- **Scaling Strategy**: [How system will scale]
+
+## Key Dependencies
+### Critical Dependencies
+- **[Dependency 1]**: [Purpose, version, criticality]
+- **[Dependency 2]**: [Purpose, version, criticality]
+- **[Dependency 3]**: [Purpose, version, criticality]
+
+### Development Dependencies
+- **[Dev Dependency 1]**: [Purpose and usage]
+- **[Dev Dependency 2]**: [Purpose and usage]
+
+### Version Management
+- **Update Strategy**: [How dependencies are updated]
+- **Security Updates**: [Process for security patches]
+- **Breaking Changes**: [How breaking changes are handled]
+
+## Integration Points
+### External Services
+- **[Service 1]**: [Purpose, API version, documentation]
+- **[Service 2]**: [Purpose, API version, documentation]
+
+### Internal Services
+- **[Service 1]**: [Purpose, communication method]
+- **[Service 2]**: [Purpose, communication method]
+
+## Development Workflow
+### Code Standards
+- **Linting**: [ESLint configuration and rules]
+- **Formatting**: [Prettier configuration]
+- **Type Checking**: [TypeScript configuration]
+- **Testing Requirements**: [Coverage and testing standards]
+
+### Git Workflow
+- **Branching Strategy**: [e.g., Git Flow, GitHub Flow]
+- **Commit Standards**: [Conventional commits, etc.]
+- **Code Review Process**: [Review requirements]
+- **Deployment Process**: [How code reaches production]
+
+## Known Issues & Limitations
+### Technical Debt
+- [Known technical debt item 1]: [Description and impact]
+- [Known technical debt item 2]: [Description and impact]
+
+### Current Limitations
+- [Limitation 1]: [Description and workaround if any]
+- [Limitation 2]: [Description and workaround if any]
+
+### Upcoming Migrations
+- [Migration 1]: [Description, timeline, impact]
+- [Migration 2]: [Description, timeline, impact]
+
+---
+
+**Note**: Keep this file updated when adopting new technologies, updating major dependencies, or changing development processes.

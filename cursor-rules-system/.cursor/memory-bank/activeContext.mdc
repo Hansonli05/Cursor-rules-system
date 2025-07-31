@@ -1,0 +1,51 @@
+---
+description: Current work focus and session goals
+globs: 
+alwaysApply: true
+---
+
+# Active Context
+
+## Current Sprint Goal
+[GOAL] **[Sprint Name]** - [Primary objective for current development cycle]
+
+## Session Focus
+[IN_PROGRESS] **Current Session** - [What are you working on right now?]
+
+## Recent Changes (Last 7 Days)
+- [COMPLETE] **[Feature/Change 1]** - [Brief description]
+- [COMPLETE] **[Feature/Change 2]** - [Brief description]
+- [IN_PROGRESS] **[Feature/Change 3]** - [Current status]
+
+## Immediate Next Steps
+1. [PRIORITY] **[Next Action 1]** - [Description and context]
+2. [READY] **[Next Action 2]** - [Description and context]
+3. [BLOCKED] **[Next Action 3]** - [Description and blocker]
+
+## Active Decisions/Considerations
+- [DECISION] **[Decision Topic 1]** - [What needs to be decided and why]
+- [RISK] **[Risk/Concern 1]** - [Description and potential impact]
+- [DEPENDENCY] **[Dependency 1]** - [What you're waiting on]
+
+## Current Technical Focus
+- [TECH] **Primary Technology**: [What you're implementing with]
+- [TECH] **Integration Points**: [Key systems being connected]
+- [TECH] **Performance Considerations**: [Current optimization focus]
+
+## Team Context (if applicable)
+- [TEAM] **Collaboration Points**: [Who you're working with on what]
+- [TEAM] **Handoffs**: [What's being passed between team members]
+- [TEAM] **Reviews**: [Code reviews, design reviews in progress]
+
+## Context for AI
+- **Feature Domain**: [Which feature-rules/*.mdc files are most relevant]
+- **Technical Domain**: [Which tech-stack/*.mdc files are most relevant]
+- **Architectural Concerns**: [Key patterns from systemPatterns.mdc to consider]
+
+## Questions/Clarifications Needed
+- [Question 1]: [What needs clarification and why]
+- [Question 2]: [What needs clarification and why]
+
+---
+
+**Update Frequency**: This file should be updated at the start and end of each development session to maintain current context.

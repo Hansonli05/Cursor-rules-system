@@ -1,0 +1,240 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+#Global Rules
+
+**Purpose**: Defines cross-cutting rules and instructions that apply to all AI-assisted development in this project.
+
+## 1. Folder Structure Protocol
+
+The `.cursor/` directory contains a hierarchical rule system with three interdependent domains:
+
+- **`memory-bank/`** - Long-term context and project intelligence (strategic decisions, progress tracking)
+- **`tech-stack/`** - Tech-specific coding patterns and constraints (implementation guidance)  
+- **`feature-rules/`** - Rules for individual features (reusable logic, feature-specific patterns)
+
+### Essential Reading Order
+AI should prioritize reading these files at the start of **every task**:
+1. `memory-bank/activeContext.mdc` - Current work focus and session goals
+2. `memory-bank/progress.mdc` - What works, what's left to build
+3. `cursor-memory-bank.mdc` - Memory Bank operation instructions
+
+## 2. Rule Execution Hierarchy
+
+When performing any task, Cursor must follow this sequence:
+
+```mermaid
+flowchart TD
+    Start[Task Begins] --> MB[Read Memory Bank Core]
+    MB --> Feature[Identify Current Feature]
+    Feature --> LoadFR[Load feature-rules/*.md]
+    LoadFR --> Tech[Determine Technologies]
+    Tech --> LoadTS[Load tech-stack/*.md] 
+    LoadTS --> Arch[Reference systemPatterns.md]
+    Arch --> Execute[Execute Task]
+    Execute --> Update[Update Documentation]
+```
+
+### Execution Steps:
+1. **Read** `memory-bank/activeContext.mdc` and `progress.mdc`
+2. **Identify** the current feature and load its corresponding `feature-rules/*.md`
+3. **Determine** relevant technologies and load corresponding `tech-stack/*.md`
+4. **Reference** `memory-bank/systemPatterns.mdc` for architectural consistency
+5. **Check for conflicts**: Verify no conflicting logic exists across rule domains before proceeding
+6. **Follow fallback logic**:
+   - If no rule exists, ask for clarification or document the new pattern
+   - Update appropriate `.md` files once confirmed
+
+## 3. Integrated Rule Domains
+
+The `.cursorrules/` system is composed of three interdependent rule domains:
+
+### Memory Bank (Strategic Layer)
+- **`memory-bank/`**: Strategic context, active focus, and long-term decisions
+- **Purpose**: Mission control for project intelligence
+- **Updates**: After major decisions, feature additions, or significant progress
+
+### Tech Stack (Implementation Layer)  
+- **`tech-stack/`**: Tool-specific usage, patterns, and best practices
+- **Purpose**: How to implement with specific technologies
+- **Updates**: When adopting new tech or discovering tech-specific patterns
+
+### Feature Rules (Feature Layer)
+- **`feature-rules/`**: Modular logic for user-facing feature implementations  
+- **Purpose**: Reusable patterns for specific features
+- **Updates**: When building new features or refining existing ones
+
+## 4. Task Planning Workflow
+
+When entering `/plan` mode, Cursor must:
+
+1. **Context Loading**:
+   - Begin with `activeContext.mdc` to understand current session goals
+   - Load the appropriate `feature-rules/*.md` based on task type
+   - Load relevant `tech-stack/*.md` based on underlying technologies
+   - Reference architectural context from `systemPatterns.mdc`
+
+2. **Analysis Phase**:
+   - Ask 3–5 clarifying questions before proposing solutions
+   - Map the full scope of changes needed
+   - Identify potential impacts across rule domains
+
+3. **Planning Phase**:
+   - Draft comprehensive plan of action
+   - Request approval before implementation
+   - Break down into clear phases/steps
+
+## 5. Cross-Domain Rule Triggers
+
+Automated updates across rule domains when:
+
+- **New feature added** → update `feature-rules/*.md` and link from `activeContext.md`
+- **New tech adopted** → update `tech-stack/*.md` and reference from `systemPatterns.md`  
+- **Major decision made** → record in `systemPatterns.md` and reference in progress logs
+- **Memory bank trigger** → review ALL memory bank files, focus on `activeContext.mdc` and `progress.mdc`
+
+## 6. File Naming and Tagging Conventions
+
+### Naming Standards:
+- All rule files must use `kebab-case.md` (e.g., `post-creation.md`)
+- Features: `feature-rules/[feature-name].md`
+- Stack: `tech-stack/[technology-name].md`  
+- Memory: `memory-bank/[file].mdc`
+
+### Content Structure:
+Use markdown headers for each rule section:
+- `## Summary` - Brief overview
+- `## Context` - Why this rule exists
+- `## Instructions` - Specific implementation guidance
+- `## Examples` - Code samples or usage patterns
+
+### Status Tags:
+- Tag open-ended rules with `#WIP` in the header
+- Archive outdated ones with `#ARCHIVED` in the header
+- Mark critical rules with `#ESSENTIAL` for priority reading
+
+## 7. AI Collaboration Best Practices
+
+### Before Major Actions:
+- Cursor must ask clarifying questions before major code generation if rules are unclear
+- Always check existing rules before creating new patterns
+- **Check and avoid conflicting logic** across all rule domains (memory-bank/, tech-stack/, feature-rules/)
+- Verify understanding with 3-5 questions for large/unclear tasks
+
+### During Development:
+- Cursor should not duplicate logic across `tech-stack/` and `feature-rules/`
+- Reference architectural patterns from `systemPatterns.md`
+- Follow established conventions from relevant rule domains
+
+### After Completion:
+- Cursor must update `activeContext.mdc` and `progress.mdc` after each major session
+- Document new patterns discovered during implementation
+- Cursor can draft rules or summaries but must confirm before adding to rule files
+
+## 8. Updates and Maintenance Protocol
+
+### Regular Maintenance:
+- Developers should review `.cursorrules/` weekly
+- All team members must document new reusable logic in `tech-stack/` if shared across features
+- All major implementation plans should be documented under `systemPatterns.md` or in a related `feature-rules/` file
+
+### Documentation Standards:
+- Organize feature rule files around atomic functionality (e.g., not `posts.md` but `post-creation.md`, `post-editing.md`)
+- Keep rules focused and specific to avoid conflicts
+- Link related rules across domains for coherent workflows
+
+## 9. Cursor Rule Extension Behavior
+
+### Pattern Recognition:
+When a pattern or rule is repeated multiple times:
+- AI should recommend consolidating it into `tech-stack/` or `systemPatterns.md`
+- Avoid hardcoding behavior without first checking existing rules
+- Suggest creating new rule files for emerging patterns
+
+### Rule Evolution:
+- Rules should evolve based on project needs
+- Archive outdated patterns rather than deleting them
+- Maintain backward compatibility when possible
+
+## 10. Prompting Protocols
+
+### Available Commands:
+- **`/plan`** - Generate scoped execution plans with full context analysis
+- **`/write-rules`** - Formalize repeated logic or refactors into rule files
+- **`update memory bank`** - Trigger comprehensive memory bank review and updates
+
+### Question Guidelines:
+- Always seek 3–5 clarifying questions if the task is large, unclear, or affects multiple files
+- Focus questions on understanding requirements, constraints, and desired outcomes
+- Verify understanding before proceeding with implementation
+
+## 11. Integration with Memory Bank System
+
+This global rule system works in harmony with the Memory Bank system defined in `cursor-memory-bank.mdc`:
+
+- **Global rules** define the operational framework
+- **Memory Bank** provides project-specific intelligence and context
+- **Together** they ensure consistent, informed AI assistance across all development tasks
+
+### Memory Reset Handling:
+Since Cursor's memory resets between sessions, this global rule system ensures:
+- Consistent behavior across all sessions
+- Proper context loading procedures  
+- Standardized documentation and update protocols
+- Reliable integration between all rule domains
+
+## 12. Documentation Standards & Status System
+
+### Text-Based Status System
+Use these standardized text indicators for consistent status tracking across all memory-bank and rule files:
+
+**IMPORTANT: NO EMOJIS ALLOWED**
+- All documentation, rules, memory-bank files, and AI responses must use text-only status indicators
+- Emojis reduce readability and create inconsistency across different systems and environments
+- Use clear text-based indicators instead of visual symbols for all status tracking
+
+**Progress Status:**
+- **[COMPLETE]** - Task/feature fully finished and tested
+- **[IN_PROGRESS]** - Currently being worked on  
+- **[BLOCKED]** - Waiting on dependencies or blocked
+- **[CANCELLED]** - Task no longer needed
+- **[PRIORITY]** - High priority or urgent task
+
+**Content Types:**
+- **[GOAL]** - Sprint goals, targets, metrics
+- **[TECH]** - Tech stack, deployment, releases  
+- **[TEAM]** - Team assignments, integration points
+- **[DEPENDENCY]** - Items waiting on other workstreams
+- **[RISK]** - Potential problems or concerns
+- **[DOCS]** - Lists, summaries, reference materials
+- **[NOTE]** - Insights, suggestions, brainstorming
+
+**Phase Indicators:**
+- **[STARTING]** - Beginning a new phase or workstream
+- **[BUILDING]** - Active development/implementation  
+- **[TESTING]** - Testing and validation phase
+- **[READY]** - Complete and ready for integration
+
+### Usage Guidelines:
+- **Consistency**: Use status indicators consistently across all memory-bank files
+- **Context**: Always follow status with descriptive text
+- **Updates**: Update status when progress changes
+- **Scanning**: Text indicators enable clear status identification
+- **AI Integration**: AI should follow this system when updating documentation
+
+### Examples:
+```
+[COMPLETE] **Next.js Setup** - Project initialized with TypeScript
+[IN_PROGRESS] **Authentication UI** - Building login/signup components  
+[BLOCKED] **Group Features** - Waiting for Backend API contracts
+[GOAL] **Sprint Goal** - Complete MVP in 1 week
+[TECH] **Tech Stack** - Next.js 15 + Supabase + TypeScript
+```
+
+This standardized system ensures clear communication and progress tracking across all team members and AI assistance.
+
+---
+
+**Remember**: These global rules serve as the foundation for all AI-assisted development. They ensure consistency, proper context usage, and effective collaboration between human developers and AI assistance throughout the project lifecycle.

@@ -1,0 +1,226 @@
+---
+description: Example authentication system implementation patterns
+globs: 
+alwaysApply: false
+---
+
+# Authentication System (Example)
+
+## Summary
+Defines patterns for implementing user authentication including login, signup, session management, and protected routes. This is an example template - customize for your specific authentication needs.
+
+## Context
+Authentication is a critical system that requires consistent patterns for security, user experience, and maintainability. This rule ensures all authentication-related code follows established patterns.
+
+## Instructions
+
+### Authentication Flow
+1. **User Registration**
+   - Collect required user information
+   - Validate input data (email format, password strength)
+   - Check for existing accounts
+   - Create user record with hashed password
+   - Send verification email (if required)
+   - Auto-login or redirect to login
+
+2. **User Login**
+   - Validate credentials
+   - Generate secure session token/JWT
+   - Set secure HTTP-only cookies
+   - Redirect to intended destination
+   - Handle "remember me" functionality
+
+3. **Session Management**
+   - Validate tokens on protected routes
+   - Refresh tokens before expiration
+   - Handle logout (clear tokens/cookies)
+   - Manage concurrent sessions
+
+### Security Patterns
+- **Password Hashing**: Use bcrypt or similar secure hashing
+- **Token Security**: Use JWT with proper expiration and signing
+- **HTTPS Only**: All authentication requests over HTTPS
+- **Rate Limiting**: Prevent brute force attacks
+- **Input Validation**: Sanitize all user inputs
+- **CSRF Protection**: Implement CSRF tokens for forms
+
+### Protected Routes
+```typescript
+// Pattern for protected route middleware
+function requireAuth(handler: RouteHandler) {
+  return async (req, res) => {
+    const token = extractTokenFromRequest(req);
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    
+    try {
+      const user = await validateToken(token);
+      req.user = user;
+      return handler(req, res);
+    } catch (error) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+  };
+}
+```
+
+### State Management
+- **Auth State**: User info, loading states, error states
+- **Persistence**: Maintain login state across browser sessions
+- **Hydration**: Handle SSR authentication state properly
+- **Logout Cleanup**: Clean all user-related state on logout
+
+## Examples
+
+### Registration Form Pattern
+```typescript
+interface RegistrationData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+}
+
+const registrationValidation = {
+  email: (email: string) => isValidEmail(email),
+  password: (password: string) => password.length >= 8 && hasSpecialChars(password),
+  confirmPassword: (password: string, confirm: string) => password === confirm
+};
+
+async function handleRegistration(data: RegistrationData) {
+  // Validate input
+  const errors = validateRegistrationData(data);
+  if (errors.length > 0) {
+    throw new ValidationError(errors);
+  }
+  
+  // Check existing user
+  const existingUser = await findUserByEmail(data.email);
+  if (existingUser) {
+    throw new ConflictError('User already exists');
+  }
+  
+  // Create user
+  const hashedPassword = await hashPassword(data.password);
+  const user = await createUser({
+    ...data,
+    password: hashedPassword
+  });
+  
+  // Send verification email
+  await sendVerificationEmail(user.email, user.verificationToken);
+  
+  return { success: true, userId: user.id };
+}
+```
+
+### Login Flow Pattern
+```typescript
+async function handleLogin(email: string, password: string) {
+  // Rate limiting check
+  await checkRateLimit(email);
+  
+  // Find user
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw new AuthenticationError('Invalid credentials');
+  }
+  
+  // Verify password
+  const isValidPassword = await verifyPassword(password, user.hashedPassword);
+  if (!isValidPassword) {
+    await recordFailedLogin(email);
+    throw new AuthenticationError('Invalid credentials');
+  }
+  
+  // Generate tokens
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  
+  // Update last login
+  await updateLastLogin(user.id);
+  
+  return {
+    user: sanitizeUserData(user),
+    accessToken,
+    refreshToken
+  };
+}
+```
+
+### Protected Component Pattern
+```typescript
+function withAuth<T>(WrappedComponent: React.ComponentType<T>) {
+  return function AuthenticatedComponent(props: T) {
+    const { user, isLoading } = useAuth();
+    
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+    
+    if (!user) {
+      return <LoginRequired />;
+    }
+    
+    return <WrappedComponent {...props} />;
+  };
+}
+
+// Usage
+const ProtectedDashboard = withAuth(Dashboard);
+```
+
+## Error Handling
+- **Validation Errors**: Clear, specific field-level errors
+- **Authentication Errors**: Generic messages to prevent user enumeration
+- **Session Errors**: Graceful logout and redirect to login
+- **Network Errors**: Retry mechanisms and offline handling
+
+## Testing Patterns
+```typescript
+describe('Authentication System', () => {
+  describe('User Registration', () => {
+    it('should create user with valid data', async () => {
+      const userData = {
+        email: 'test@example.com',
+        password: 'SecurePass123!',
+        confirmPassword: 'SecurePass123!',
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+      
+      const result = await handleRegistration(userData);
+      
+      expect(result.success).toBe(true);
+      expect(result.userId).toBeDefined();
+    });
+    
+    it('should reject weak passwords', async () => {
+      const userData = {
+        email: 'test@example.com',
+        password: '123',
+        confirmPassword: '123',
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+      
+      await expect(handleRegistration(userData))
+        .rejects.toThrow(ValidationError);
+    });
+  });
+});
+```
+
+## Integration Points
+- **Database**: User storage, session management
+- **Email Service**: Verification, password reset emails
+- **Rate Limiting**: Brute force protection
+- **Logging**: Security events, failed login attempts
+- **Analytics**: User engagement, conversion tracking
+
+---
+
+**Note**: This is an example template. Customize the patterns, validation rules, and security measures based on your specific requirements and compliance needs.
